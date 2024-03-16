@@ -1,51 +1,52 @@
-def win_cases(board):
-    if board[0] == board[1] == board[2]:
-        return True
+def win_cases(board, player):
+    win_shiii = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
+    for combo in win_shiii:
+        if board[combo[0]] == board[combo[1]] == board[combo[2]]:
+            print(f"{player} you've won!")
+            return True
+        
 
-    if board[3] == board[4] == board[5]:
-        return True
-
-    if board[6] == board[7] == board[8]:
-        return True
-
-    if board[0] == board[3] == board[6]:
-        return True
-
-    if board[1] == board[4] == board[7]:
-        return True
-
-    if board[2] == board[5] == board[8]:
-        return True
-
-    if board[0] == board[4] == board[8]:
-        return True
-
-    if board[2] == board[4] == board[6]:
-        return True
-    else:
-        return False
+# def cool_board():
     
 
 def whos_turn_is_it_anyway(current_player):
     if current_player == 'X':
         return 'O'
-    else:
-        return 'X'  
+    
+    return 'X'  
 
 def moves(player, current_board):
+    print(f"┌───╤───╤───┐")
+    print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
+    print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
+    print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
+    print(f"└───╧───╧───┘")
     player_input = input(f'What spot chuwant {player}?:   ')
     spot = int(player_input)
-    while current_board[spot] == spot:
+    if current_board[spot] == spot:
             current_board[spot] = player
-            print(current_board)
-    game_over = win_cases(current_board)
+            print(f"┌───╤───╤───┐")
+            print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
+            print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
+            print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
+            print(f"└───╧───╧───┘")
+    else:
+         raise AttributeError('Spot does not exist')
+    game_over = win_cases(current_board, player)
     return current_board, game_over
 
+def run():
+    gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    player = 'X'
+    game_over = False
 
-gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-player = 'X'
-game_over = False
+    while not game_over:
+        try: 
+            gameboard, game_over = moves(player, gameboard)
+        except:
+             print("That's not a spot g")
+             continue
+        player = whos_turn_is_it_anyway(player)
 
-while game_over == False:
-    gameboard, game_over = moves(player, gameboard)
-    player = whos_turn_is_it_anyway(player)
+
+run()
