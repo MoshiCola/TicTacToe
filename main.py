@@ -6,7 +6,12 @@ def win_cases(board, player):
             return True
         
 
-# def cool_board():
+def cool_board(current_board):
+    print(f"┌───╤───╤───┐")
+    print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
+    print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
+    print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
+    print(f"└───╧───╧───┘")
     
 
 def whos_turn_is_it_anyway(current_player):
@@ -16,20 +21,12 @@ def whos_turn_is_it_anyway(current_player):
     return 'X'  
 
 def moves(player, current_board):
-    print(f"┌───╤───╤───┐")
-    print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
-    print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
-    print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
-    print(f"└───╧───╧───┘")
+    cool_board(current_board)
     player_input = input(f'What spot chuwant {player}?:   ')
     spot = int(player_input)
     if current_board[spot] == spot:
             current_board[spot] = player
-            print(f"┌───╤───╤───┐")
-            print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
-            print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
-            print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
-            print(f"└───╧───╧───┘")
+            cool_board(current_board)
     else:
          raise AttributeError('Spot does not exist')
     game_over = win_cases(current_board, player)
