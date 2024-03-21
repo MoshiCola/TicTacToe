@@ -4,14 +4,23 @@ def win_cases(board, player):
         if board[combo[0]] == board[combo[1]] == board[combo[2]]:
             print(f"{player} you've won!")
             return True
+
+        
+def issa_tie(board):
+    for int in board:
+        string = str(int)
+        if string.isdigit():
+            return False
+    print('Issa tie. Double L')
+    return True
         
 
 def cool_board(current_board):
-    print(f"┌───╤───╤───┐")
+    print(f"┌───┬───┬───┐")
     print(f"│ {current_board[0]} │ {current_board[1]} │ {current_board[2]} │")
     print(f"│ {current_board[3]} │ {current_board[4]} │ {current_board[5]} │")
     print(f"│ {current_board[6]} │ {current_board[7]} │ {current_board[8]} │")
-    print(f"└───╧───╧───┘")
+    print(f"└───┴───┴───┘")
     
 
 def whos_turn_is_it_anyway(current_player):
@@ -27,6 +36,7 @@ def moves(player, current_board):
     if current_board[spot] == spot:
             current_board[spot] = player
             cool_board(current_board)
+
     else:
          raise AttributeError('Spot does not exist')
     game_over = win_cases(current_board, player)
@@ -40,10 +50,10 @@ def run():
     while not game_over:
         try: 
             gameboard, game_over = moves(player, gameboard)
+            game_over = issa_tie(gameboard)
         except:
              print("That's not a spot g")
              continue
         player = whos_turn_is_it_anyway(player)
-
 
 run()
