@@ -1,3 +1,5 @@
+import random
+from sys import exit
 def win_cases(board, player):
     win_shiii = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
     for combo in win_shiii:
@@ -27,7 +29,15 @@ def whos_turn_is_it_anyway(current_player):
     if current_player == 'X':
         return 'O'
     
-    return 'X'  
+    return 'X'
+
+# def computer_move():
+    
+
+
+
+
+
 
 def moves(player, current_board):
     cool_board(current_board)
@@ -42,7 +52,7 @@ def moves(player, current_board):
     game_over = win_cases(current_board, player)
     return current_board, game_over
 
-def run():
+def PVP():
     gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     player = 'X'
     game_over = False
@@ -50,10 +60,48 @@ def run():
     while not game_over:
         try: 
             gameboard, game_over = moves(player, gameboard)
-            game_over = issa_tie(gameboard)
+            if game_over == False:
+                game_over = issa_tie(gameboard)
         except:
              print("That's not a spot g")
              continue
         player = whos_turn_is_it_anyway(player)
 
-run()
+def computer():
+    gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    player = 'X'
+    game_over = False
+
+    while not game_over:
+        try: 
+            if player == 'X':
+                gameboard, game_over = moves(player, gameboard)
+                if game_over == False:
+                    game_over = issa_tie(gameboard)
+            else:
+                gameboard = computer_move()
+                game_over = win_cases(gameboard, player)
+                if game_over == False:
+                    game_over = issa_tie(gameboard)
+        except:
+             print("That's not a spot g")
+             continue
+        player = whos_turn_is_it_anyway(player)
+
+
+def menu():
+    while True:
+        choice = input(f'Type "PVP" for 2 players. Type "COM" for 1 player. Type "exit" to leave.')
+        if choice == 'exit':
+            print('You Exit')
+            exit()
+        if choice == 'PVP':
+            print('Player')
+            PVP()
+        elif choice == 'COM':
+            print('Computer')
+            Computer()
+        else:
+            print('Dont be weird pick something...')
+
+menu()
