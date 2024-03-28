@@ -6,6 +6,7 @@ def win_cases(board, player):
         if board[combo[0]] == board[combo[1]] == board[combo[2]]:
             print(f"{player} you've won!")
             return True
+    return False
 
         
 def issa_tie(board):
@@ -37,9 +38,12 @@ def computer_move(player, board):
             random_spot = random.randint(0, 8)
             if board[random_spot] != 'X' and board[random_spot] != 'O':
                 board[random_spot] = player
-                return board
+                cool_board(board)
+                game_over = win_cases(board, player)
+                return board, game_over
         except IndexError:
             continue
+
 
 def moves(player, current_board):
     cool_board(current_board)
@@ -49,32 +53,28 @@ def moves(player, current_board):
         exit()
     if current_board[spot] == spot:
             current_board[spot] = player
-            cool_board(current_board)
     else:
         print('Pick a valid spot.')
-        
-    game_over = win_cases(current_board, player)
-    return current_board, game_over
+    
+    return current_board
 
 def PVP():
     gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     player = 'X'
     game_over = False
 
-    while not game_over:
+    while game_over == False:
+        while True:
 
-        
+            try: 
+                gameboard = moves(player, gameboard)
+                game_over = win_cases(gameboard, player)
+                if game_over == False:
+                    game_over = issa_tie(gameboard)
 
-        try: 
-            gameboard, game_over = moves(player, gameboard)
-            player = whos_turn_is_it_anyway(player)
-            if game_over == False:
-                game_over = issa_tie(gameboard)
-        except:
-            print("That's not a spot g")
-            continue
-    # if choice == 'COM':
-            
+                player = whos_turn_is_it_anyway(player)
+            except IndexError:
+                continue
 
 def computer():
     choice = input(f'Pick "X" or "O":   ')
@@ -82,32 +82,36 @@ def computer():
     player = 'X'
     game_over = False
 
-    while not game_over:
+    while game_over == False:
+        while True:
 
+            if choice == "X":
 
-        try: 
-            if choice == 'X':
-                gameboard, game_over = moves(player, gameboard)
-                if game_over == False:
+                try:
+                    gameboard, game_over = moves(player, gameboard)
+                    if game_over == False:
+                        game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
-                    game_over = issa_tie(gameboard)              
-                gameboard = computer_move(player, gameboard)
-                game_over = win_cases(gameboard, player)
-                if game_over == False:
+                    gameboard, game_over = computer_move(player, gameboard)
+                    if game_over == False:
+                        game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
-                    game_over = issa_tie(gameboard)
+                    
+                except IndexError:
+                    continue
+                    
             if choice == 'O':
-                gameboard = computer_move(player, gameboard)
-                game_over = win_cases(gameboard, player)
-                if game_over == False:
+                try:
+                    gameboard, game_over = computer_move(player, gameboard)
+                    if game_over == False:
+                        game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
-                    game_over = issa_tie(gameboard)
-                gameboard, game_over = moves(player, gameboard)
-                if game_over == False:
+                    gameboard, game_over = moves(player, gameboard)
+                    if game_over == False:
+                        game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
-                    game_over = issa_tie(gameboard)
-        except IndexError:
-            continue
+                except IndexError:
+                    continue
 
 
 
