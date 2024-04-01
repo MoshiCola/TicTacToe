@@ -4,7 +4,9 @@ def win_cases(board, player):
     win_shiii = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
     for combo in win_shiii:
         if board[combo[0]] == board[combo[1]] == board[combo[2]]:
+            cool_board(board)
             print(f"{player} you've won!")
+            run()
             return True
     return False
 
@@ -49,32 +51,33 @@ def moves(player, current_board):
     cool_board(current_board)
     player_input = input(f'What spot chuwant {player}?:   ')
     spot = int(player_input)
-    if player_input == 'exit':
+    if player_input.upper() == 'EXIT':
         exit()
     if current_board[spot] == spot:
             current_board[spot] = player
     else:
         print('Pick a valid spot.')
     
-    return current_board
+    game_over = win_cases(current_board, player)
+    return current_board, game_over
 
 def PVP():
     gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     player = 'X'
     game_over = False
 
-    while game_over == False:
-        while True:
 
-            try: 
-                gameboard = moves(player, gameboard)
-                game_over = win_cases(gameboard, player)
-                if game_over == False:
-                    game_over = issa_tie(gameboard)
+    while True:
 
-                player = whos_turn_is_it_anyway(player)
-            except IndexError:
-                continue
+        try: 
+            gameboard, game_over = moves(player, gameboard)
+            
+            if game_over == False:
+                game_over = issa_tie(gameboard)
+
+            player = whos_turn_is_it_anyway(player)
+        except IndexError:
+            continue
 
 def computer():
     choice = input(f'Pick "X" or "O":   ')
@@ -85,7 +88,7 @@ def computer():
     while game_over == False:
         while True:
 
-            if choice == "X":
+            if choice.upper() == "X":
 
                 try:
                     gameboard, game_over = moves(player, gameboard)
@@ -100,7 +103,7 @@ def computer():
                 except IndexError:
                     continue
                     
-            if choice == 'O':
+            if choice.upper() == 'O':
                 try:
                     gameboard, game_over = computer_move(player, gameboard)
                     if game_over == False:
@@ -117,14 +120,14 @@ def computer():
 
 def run():
     while True:
-        choice = input(f'Type "PVP" for 2 players. Type "COM" for 1 player. Type "exit" to leave.:  ')
-        if choice == 'exit':
+        choice = input(f'Type "PVP" for 2 players. Type "COM" for 1 player. Type "exit" to leave:  ')
+        if choice.upper() == 'EXIT':
             print('You Exit')
             exit()
-        if choice == 'PVP':
+        if choice.upper() == 'PVP':
             print('Player')
             PVP()
-        elif choice == 'COM':
+        elif choice.upper() == 'COM':
             print('Computer')
             computer()
         else:
