@@ -1,6 +1,6 @@
 import random
 from sys import exit
-def win_cases(board, player):
+def win_cases(player, board):
     win_shiii = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
     for combo in win_shiii:
         if board[combo[0]] == board[combo[1]] == board[combo[2]]:
@@ -10,6 +10,24 @@ def win_cases(board, player):
             return True
     return False
 
+
+def saver(player, board, game_choice, letter_choice):
+    new_board = [str(i) for i in board]
+    with open('saved_game.txt', 'w') as save:
+        save.write("".join(new_board) + '\n' + player + '\n' + game_choice + '\n' + letter_choice)
+
+
+def loader(): 
+    with open('saved_game.txt', 'r') as save:
+        data = save.read().split('\n')
+        board = data[0]
+        player = data[1]
+        game_choice = data[2]
+        letter_choice = data[3]
+        if game_choice.upper == 'COM':
+            computer(player, board, game_choice, letter_choice)
+        else:
+            PVP(player, board, game_choice, letter_choice)
         
 def issa_tie(board):
     for int in board:
@@ -41,36 +59,39 @@ def computer_move(player, board):
             if board[random_spot] != 'X' and board[random_spot] != 'O':
                 board[random_spot] = player
                 cool_board(board)
-                game_over = win_cases(board, player)
+                game_over = win_cases(player, board)
                 return board, game_over
         except IndexError:
             continue
 
 
-def moves(player, current_board):
+def player_moves(player, current_board, game_choice, letter_choice):
     cool_board(current_board)
     player_input = input(f'What spot chuwant {player}?:   ')
-    spot = int(player_input)
+    if player_input.upper() == 'SAVE':
+        print('saved! noice!')
+        saver(player, current_board, game_choice, letter_choice)
+        run()
     if player_input.upper() == 'EXIT':
         exit()
-    if current_board[spot] == spot:
-            current_board[spot] = player
+    try:
+        if current_board[int(player_input)] == int(player_input):
+                current_board[int(player_input)] = player
+    except: IndexError
     else:
         print('Pick a valid spot.')
     
-    game_over = win_cases(current_board, player)
+    game_over = win_cases(player, current_board)
     return current_board, game_over
 
-def PVP():
-    gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    player = 'X'
+def PVP(player, gameboard, game_choice, letter_choice):
     game_over = False
 
 
     while True:
 
         try: 
-            gameboard, game_over = moves(player, gameboard)
+            gameboard, game_over = player_moves(player, gameboard, game_choice, letter_choice)
             
             if game_over == False:
                 game_over = issa_tie(gameboard)
@@ -79,19 +100,16 @@ def PVP():
         except IndexError:
             continue
 
-def computer():
-    choice = input(f'Pick "X" or "O":   ')
-    gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    player = 'X'
+def computer(player, gameboard, game_choice, letter_choice):
     game_over = False
 
     while game_over == False:
         while True:
 
-            if choice.upper() == "X":
+            if letter_choice.upper() == "X":
 
                 try:
-                    gameboard, game_over = moves(player, gameboard)
+                    gameboard, game_over = player_moves(player, gameboard, game_choice, letter_choice)
                     if game_over == False:
                         game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
@@ -103,13 +121,13 @@ def computer():
                 except IndexError:
                     continue
                     
-            if choice.upper() == 'O':
+            if letter_choice.upper() == 'O':
                 try:
                     gameboard, game_over = computer_move(player, gameboard)
                     if game_over == False:
                         game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
-                    gameboard, game_over = moves(player, gameboard)
+                    gameboard, game_over = player_moves(player, gameboard, game_choice, letter_choice)
                     if game_over == False:
                         game_over = issa_tie(gameboard)
                     player = whos_turn_is_it_anyway(player)
@@ -119,17 +137,25 @@ def computer():
 
 
 def run():
+    gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    player = 'X'
     while True:
-        choice = input(f'Type "PVP" for 2 players. Type "COM" for 1 player. Type "exit" to leave:  ')
-        if choice.upper() == 'EXIT':
+        game_choice = input(f'Type "load" to load a game. Type "PVP" for 2 players. Type "COM" for 1 player. Type "exit" to leave:  ')
+        if game_choice.upper() == 'LOAD':
+             print('Loading the game')
+             loader()
+             break
+        if game_choice.upper() == 'EXIT':
             print('You Exit')
             exit()
-        if choice.upper() == 'PVP':
-            print('Player')
-            PVP()
-        elif choice.upper() == 'COM':
+        if game_choice.upper() == 'PVP':
+            print('2 Player')
+            letter_choice = 'X'
+            PVP(player, gameboard, game_choice, letter_choice)
+        elif game_choice.upper() == 'COM':
             print('Computer')
-            computer()
+            letter_choice = input(f'You want X or O?:  ')
+            computer(player, gameboard, game_choice, letter_choice)
         else:
             print('Dont be weird pick something...')
 
