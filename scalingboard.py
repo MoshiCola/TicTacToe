@@ -1,6 +1,6 @@
 def scalingboard(board_size):
     fullboard = [i for i in range(0, board_size ** 2)]
-    print(fullboard)
+    return fullboard
 
 def print_scalingboard(fullboard, board_size):
     for row in range(0, board_size):
